@@ -8,13 +8,10 @@ const Users = require("../users/users-model.js")
 
 //endpoint to register
 router.post('/register', (req, res) => {
-//should take username and password from req.body
   let user = req.body;
-//before saving password to database, bcrypt should hash it
   const rounds = process.env.HASH_ROUNDS || 14;
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
-//then add username and hashed password to database
   Users.add(users)
     .then(saved => {
       res.status(201).json(saved);
@@ -27,12 +24,7 @@ router.post('/register', (req, res) => {
 
 //endpoint to login
 router.post('/login', (req, res) => {
-//should take username and password from req.body
   let { username, password } = req.body;
-//then look in database for matching username and
-//matching password using bcrypt.compareSync on password
-//if found, return a generated token for
-//user to save and access protected endpoints
   Users.findBy({ username })
     .then(([user]) => {
       if (user && bcrypt.compareSync(password, user.password)) {
