@@ -39,6 +39,18 @@ router.get('/:id/recipes/:recipeId', (req, res) => {
         .catch(err => res.status(400).json({ message: 'could not find that recipe.'}))
     })
     .catch(err => res.status(500).json({ message: 'error getting recipe.'}))
+});
+
+router.post('/:id/recipes', (req, res) => {
+    const { id } = req.params;
+    const newRecipe = req.body;
+    newRecipe.user_id = id;
+
+    Users.addRecipe(newRecipe, id)
+    .then(recipes => {
+        res.status(200).json(recipes)
+    })
+    .catch(err => res.status(500).json({ message: 'error adding recipe.'}))
 })
 
 module.exports = router;

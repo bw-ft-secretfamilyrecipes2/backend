@@ -5,6 +5,7 @@ module.exports = {
     findBy,
     findRecipes,
     findRecipeById,
+    addRecipe,
 }
 
 async function add(user) {
@@ -47,10 +48,10 @@ function findRecipeById(recipeId){
     .where('users.id', recipeId)
 }
 
-// function addRecipe(recipe){
-//     return db('recipes')
-//             .insert(recipe, 'id')
-//             .then(([id]) => {
-//                 return 
-//             })
-// }
+function addRecipe(newRecipe, id){
+    return db('recipes')
+            .insert(newRecipe, 'id')
+            .then(() => {
+                return findRecipes(id)
+            })
+}
