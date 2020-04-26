@@ -36,7 +36,7 @@ function findRecipes(id) {
 
 function findRecipeById(recipeId){
     return db("users")
-    .join('recipes', 'users.id', 'recipes.user_id')
+    .join('recipes', 'users.id', 'recipes.id')
     .select('recipes.id',
             'recipes.user_id',
             'recipes.recipeName',

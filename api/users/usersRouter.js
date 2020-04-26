@@ -28,12 +28,12 @@ router.get('/:id/recipes/:recipeId', (req, res) => {
 
     Users.findRecipes(id)
     .then(recipes => {
-        !recipes[0]
-        ?res.status(400).json({ message: 'no recipes have been created for this user.'})
+        recipes.length == 0
+        ? res.status(400).json({ message: 'no recipes have been created for this user.'})
         :Users.findRecipeById(recipeId)
-        .then(recipe =>{
-            !recipe[0]
-            ?res.status(400).json({ message: 'that recipeId does not exist for this user.'})
+        .then(recipe => {
+            recipes.length == 0
+            ? res.status(400).json({ message: 'that recipeId does not exist for this user.'})
             :res.status(200).json(recipe)
         })
         .catch(err => res.status(400).json({ message: 'could not find that recipe.'}))
