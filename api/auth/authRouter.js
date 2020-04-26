@@ -9,12 +9,12 @@ const Users = require("../users/usersModel.js")
 //endpoint to register
 router.post('/register', (req, res) => {
   let user = req.body;
-  const rounds = process.env.HASH_ROUNDS || 14;
+  const rounds = process.env.HASH_ROUNDS || 6;
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
   Users.add(user)
     .then(saved => {
-      res.status(201).json(saved);
+      res.status(201).json({ message: "Thank you for registering!"});
     })
     .catch(error => {
       console,log(error);
@@ -31,7 +31,7 @@ router.post('/login', (req, res) => {
         const token = generateToken(user);
         res.status(200).json({ message: "Welcome!", token })
       } else {
-        res.status(401).json({ message: "You shall not pass!" })
+        res.status(401).json({ message: "please provide valid credentials to access website." })
       }
     })
     .catch(error => {
