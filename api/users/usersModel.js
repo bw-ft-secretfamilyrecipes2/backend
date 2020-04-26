@@ -6,6 +6,8 @@ module.exports = {
     findRecipes,
     findRecipeById,
     addRecipe,
+    // updateRecipe,
+    
 }
 
 async function add(user) {
@@ -55,3 +57,10 @@ function addRecipe(newRecipe, id){
                 return findRecipes(id)
             })
 }
+
+// function updateRecipe(changes, recipeId){
+//     return db('recipes')
+//         .update(changes)
+//         .where({ recipeId })
+// }
+
