@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const secrets = require("../../secrets");
 
-const Users = require("../users/users-model.js")
+const Users = require("../users/usersModel.js")
 
 //endpoint to register
 router.post('/register', (req, res) => {
@@ -12,7 +12,7 @@ router.post('/register', (req, res) => {
   const rounds = process.env.HASH_ROUNDS || 14;
   const hash = bcrypt.hashSync(user.password, rounds);
   user.password = hash;
-  Users.add(users)
+  Users.add(user)
     .then(saved => {
       res.status(201).json(saved);
     })
