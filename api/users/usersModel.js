@@ -7,7 +7,7 @@ module.exports = {
     findRecipeById,
     addRecipe,
     updateRecipe,
-    
+    removeRecipe
 }
 
 async function add(user) {
@@ -65,4 +65,10 @@ function updateRecipe(changes, recipeId){
             .then(() => {
                 return findRecipeById(recipeId)
             })
+}
+
+function removeRecipe(recipeId) {
+    return db('recipes')
+        .where('recipes.id', recipeId)
+        .del()
 }
