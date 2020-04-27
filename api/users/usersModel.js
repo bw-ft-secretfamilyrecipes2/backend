@@ -6,7 +6,7 @@ module.exports = {
     findRecipes,
     findRecipeById,
     addRecipe,
-    // updateRecipe,
+    updateRecipe,
     
 }
 
@@ -47,7 +47,7 @@ function findRecipeById(recipeId){
             'recipes.prepTime',
             'recipes.cookTime',
             'recipes.yields')
-    .where('users.id', recipeId)
+    .where('recipes.id', recipeId)
 }
 
 function addRecipe(newRecipe, id){
@@ -58,9 +58,11 @@ function addRecipe(newRecipe, id){
             })
 }
 
-// function updateRecipe(changes, recipeId){
-//     return db('recipes')
-//         .update(changes)
-//         .where({ recipeId })
-// }
-
+function updateRecipe(changes, recipeId){
+    return db('recipes')
+            .where('recipes.id', recipeId)
+            .update(changes)
+            .then(() => {
+                return findRecipeById(recipeId)
+            })
+}
