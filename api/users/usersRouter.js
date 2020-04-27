@@ -75,4 +75,22 @@ router.put('/:id/recipes/:recipeId', (req, res) => {
     .catch(err => res.status(400).json({ message: 'error finding that recipe.', err}))
 })
 
+// delete recipe
+router.delete('/:id/recipes/:recipeId', (req, res) => {
+    const { id, recipeId } = req.params;
+  
+    Users.findRecipeById(recipeId)
+      .then(recipe => {
+        if (!recipe.length) {
+          res.status(400).json({ message: 'that recipe does not exist.' })
+        }
+        Users.removeRecipe(recipeId)
+          .then(deleted => {
+            res.status(201).json({ message: 'deleted successfully!', deleted })
+          })
+          .catch(err => res.status(400).json({ message: 'error deleting the recipe.' }))
+      })
+      .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
+  })
+
 module.exports = router;
