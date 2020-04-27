@@ -28,12 +28,12 @@ router.get('/:id/recipes/:recipeId', (req, res) => {
 
     Users.findRecipes(id)
     .then(recipes => {
-        recipes.length == 0
-        ? res.status(400).json({ message: 'no recipes have been created for this user.'})
+        !recipes[0]
+        ?res.status(400).json({ message: 'no recipes have been created for this user.'})
         :Users.findRecipeById(recipeId)
-        .then(recipe => {
-            recipe.length == 0
-            ? res.status(400).json({ message: 'that recipeId does not exist for this user.'})
+        .then(recipe =>{
+            !recipe[0]
+            ?res.status(400).json({ message: 'that recipeId does not exist for this user.'})
             :res.status(200).json(recipe)
         })
         .catch(err => res.status(400).json({ message: 'could not find that recipe.'}))
@@ -41,6 +41,7 @@ router.get('/:id/recipes/:recipeId', (req, res) => {
     .catch(err => res.status(500).json({ message: 'error getting recipe.'}))
 });
 
+//adds recipe
 router.post('/:id/recipes', (req, res) => {
     const { id } = req.params;
     const newRecipe = req.body;
@@ -51,28 +52,27 @@ router.post('/:id/recipes', (req, res) => {
         res.status(200).json(recipes)
     })
     .catch(err => res.status(500).json({ message: 'error adding recipe.'}))
+});
+
+//updates recipe
+router.put('/:id/recipes/:recipeId', (req, res) => {
+    const { id, recipeId } = req.params;
+    const changes = req.body;
+
+    Users.findRecipeById(recipeId)
+    .then(recipe => {
+        console.log('res: ', recipe)
+        if(!recipe[0]){
+            res.status(400).json({ message: 'that recipe does not exist.' })
+        }
+        Users.updateRecipe(changes, recipeId)
+        .then(update => {
+            console.log(update)
+            res.status(201).json({ message: 'update success!', update})
+        })
+        .catch(err => res.status(400).json({ message: 'error updating that recipe.' }))
+    })
+    .catch(err => res.status(400).json({ message: 'error finding that recipe.', err}))
 })
 
-// router.put('/:id/recipes/:recipeId', (req, res) => {
-//     const { id, recipeId } = req.params;
-//     const changes = req.body;
-
-//     Users.findRecipes(id)
-//     .then(recipes => {
-//         recipes.length == 0
-//         ? res.status(400).json({ message: 'no recipes have been created for this user.'})
-//         : Users.findRecipeById(recipeId)
-//         .then(recipe => {
-//             recipe.length == 0
-//             ? res.status(400).json({ message: 'that recipeId does not exist for this user.'})
-//             : recipe.updateRecipe(changes, recipeId)
-//                 .then(updatedRecipe => {
-//                     res.json(updatedRecipe);
-//                 })
-//                 .catch(err => res.status(500).json({ message: 'failed to update recipe'}))
-//         })
-//         .catch(err => res.status(404).json({ message: 'could not find that recipe.'}))
-//     })
-//     .catch(err => res.status(500).json({ message: 'error getting recipe.'}))
-// })
 module.exports = router;
