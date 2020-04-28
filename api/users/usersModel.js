@@ -10,11 +10,14 @@ module.exports = {
     removeRecipe
 }
 
-async function add(user) {
-    const [id] = await db("users")
-    .insert(user, "id");
-    return findBy(id)
-}
+function add(user) {
+    return db('users')
+      .insert(user, 'id')
+      .then((ids) => {
+        const [id] = ids;
+        return findById(id);
+      });
+  }
 
 function findBy(filter) {
     return db("users")
