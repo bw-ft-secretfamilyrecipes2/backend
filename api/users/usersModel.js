@@ -21,7 +21,6 @@ function findBy(filter) {
 }
 
 function findRecipes(id) {
-    // select * from users joins recipes on users.id = recipes.user_id;
     return db("users")
         .join('recipes', 'users.id', 'recipes.user_id')
         .select('users.username',
