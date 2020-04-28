@@ -2,6 +2,8 @@ const router = require("express").Router();
 
 const Recipes = require('./recipes-model.js');
 
+const cloudinary = require('cloudinary').v2;
+
 //gets all recipes
 router.get('/', (req, res) => {
   Recipes.getRecipes()
@@ -128,5 +130,43 @@ router.delete('/:id/steps/:stepId', (req, res) => {
     })
     .catch(err => res.status(400).json({ message: 'error finding that step.', err }))
 })
+
+cloudinary.config({
+  cloud_name: 'imagevideo',
+  api_key: '312561633271293',
+  api_secret: 'hnbjjHVnNfC0RVXUJrCvy5u9NLc',
+});
+
+// PUT add/edit recipe image
+router.put('/:id/image', (req, res) => {
+  const file = req.files.image;
+  const id = req.params.id
+
+  console.log('file:', file, 'id:', id);
+  cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+    console.log('CLOUDINARY', result);
+    Recipes.updateRecipePic({ imageURL: result.url }, id)
+      .then(res => {
+        res.json({ success: true, result });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: 'Error uploading to Cloudinary' });
+      });
+  });
+});
+
+// GET get recipe image
+router.get('/:id/image', (req, res) => {
+  const { id } = req.params;
+  Recipes.findRecipePic(id)
+    .then(picture => {
+      res.status(200).json(picture);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'Failed to get image urls' });
+    });
+});
 
 module.exports = router;

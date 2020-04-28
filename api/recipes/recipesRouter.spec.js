@@ -27,10 +27,9 @@ describe('recipesRouter', () => {
 //         return request(server)
 //             .post('/:id/steps')
 //             .send({ 
-//                 id: 3,
 //                 recipe_id: 1,
-//                 stepNum: 3,
-//                 stepInstruction: 'steam the shumai'
+//                 stepNum: 4,
+//                 stepInstruction: 'take out the shumai'
 //             })
 //             .then(res => {
 //                 expect(res.status).toBe(201);
