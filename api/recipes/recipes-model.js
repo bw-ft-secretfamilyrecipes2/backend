@@ -3,7 +3,6 @@ const db = require('../../data/db-config');
 module.exports = {
     getRecipes,
     getById,
-    // createRecipe,
     findSteps,
     addStep,
     findStepById,
@@ -22,19 +21,9 @@ function getById(id){
     .first()
 };
 
-// function createRecipe(recipe){
-//     return db("recipes")
-//     .insert(recipe, "id")
-//     .then(([id]) => {
-//       return findById(id);
-//     });
-// };
-
 function findSteps(id) {
-    // select * from Recipes joins steps on recipes.id = steps.recipe_id;
-    return db.select('*').from('recipes')
-        .join('steps', 'recipes.id', 'steps.recipe_id')
-        .where('recipes.id', id)
+    return db.select('*').from('steps')
+        .where('steps.recipe_id', id)
 }
 
 async function addStep(step, recipe_id) {

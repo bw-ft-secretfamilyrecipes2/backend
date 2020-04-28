@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const Recipes = require('./recipes-model.js');
 
+//gets all recipes
 router.get('/', (req, res) => {
   Recipes.getRecipes()
   .then(recipes => {
@@ -10,6 +11,7 @@ router.get('/', (req, res) => {
   .catch(err => res.status(500).json({ message: 'Failed to get recipes.'}))
 });
 
+//gets recipe by recipe's id
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
