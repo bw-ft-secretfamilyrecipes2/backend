@@ -1,4 +1,4 @@
-const db = knex(knexConfig.development || process.env(DATABASE_URL) || process.env.DB_ENV);
+const db = require('../../data/db-config');
 
 module.exports = {
     add,
