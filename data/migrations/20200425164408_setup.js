@@ -4,8 +4,7 @@ exports.up = function(knex) {
         knex.schema
         //users
         .createTable('users', users => {
-            users.increments('id', 255)
-            .primary()
+            users.increments('id')
             users.string('username', 255)
             .notNullable()
             .unique();
@@ -15,8 +14,7 @@ exports.up = function(knex) {
 
         //recipes
         .createTable('recipes', recipes => {
-            recipes.increments('id', 255)
-            .primary();
+            recipes.increments('id')
             recipes.integer('user_id', 255)
             .notNullable()
             .references('users.id')
@@ -31,12 +29,10 @@ exports.up = function(knex) {
         })
         //steps
         .createTable('steps', steps => {
-            steps.increments('id', 255)
-            .primary();
+            steps.increments('id')
             steps.integer('recipe_id', 255)
             .references('recipes.id')
             steps.integer('stepNum', 255)
-            .unique()
             .notNullable();
             steps.text('stepInstruction')
             .notNullable();
@@ -44,8 +40,7 @@ exports.up = function(knex) {
     
         //ingredients
         .createTable('ingredients', ingredients => {
-            ingredients.increments('id', 255)
-            .primary();
+            ingredients.increments('id')
             ingredients.string('ingredientName', 255)
             .unique()
             .notNullable();
@@ -53,7 +48,7 @@ exports.up = function(knex) {
 
         //foreign key
         .createTable('recipe_ingredients', recipe_ingredients => {
-            recipe_ingredients.increments('id', 255).primary();
+            recipe_ingredients.increments('id')
             //recipeId
             recipe_ingredients.integer('recipe_id', 255)
             .notNullable()

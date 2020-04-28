@@ -12,6 +12,14 @@ exports.seed = function(knex) {
         {
           id: 3,
           ingredientName: 'corn starch'
+        },
+        {
+          id: 4,
+          ingredientName: 'dough'
+        },
+        {
+          id: 5,
+          ingredientName: 'bok choy plant'
         }
       ]);
     };
