@@ -33,8 +33,9 @@ async function addStep(step, recipe_id) {
 }
 
 function findStepById(stepId) {
-    return db.select('*').from('steps')
-        .where('steps.id', stepId);
+    return db.select('*').from('recipes')
+        .join('steps', 'recipes.id', 'steps.id')
+        .where('steps.id', stepId)
 }
 
 function updateStep(changes, stepId) {
