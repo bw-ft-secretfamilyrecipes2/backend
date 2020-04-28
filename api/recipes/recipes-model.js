@@ -9,6 +9,8 @@ module.exports = {
     updateStep,
     removeStep,
     assignIngredient,
+    updateRecipePic,
+    findRecipePic,
 }
 
 function getRecipes(){
@@ -66,9 +68,22 @@ function assignIngredient( recipe_id, ingredient_id){
         if(!found){
             return db('recipe_ingredients')
             .insert({recipe_id, ingredient_id})
-        }else {
+        } else {
             return null
         }
     })
     .catch(err => console.log('dberr: ', err))
+}
+
+function updateRecipePic(changes, id) {
+    return db('recipes')
+        .where({ id })
+        .update(changes)
+        .then(count => findById(id));
+}
+
+function findRecipePic(id) {
+    return db('recipes')
+        .select('id', 'imageURL')
+        .where({ id });
 }
