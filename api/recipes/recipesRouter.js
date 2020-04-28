@@ -7,7 +7,7 @@ router.get("/", (req, res) => {
     // console.log("token", req.decodedToken);
     Recipes.getRecipes()
       .then(recipes => {
-        res.json(recipes);
+        res.staus(200).json(recipes);
       })
       .catch(err => {
         res.status(500).json({ message: 'Failed to get recipes' });
@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
   Recipes.getById(id)
     .then(recipe => {
       if (recipe) {
-        res.json(recipe);
+        res.status(200).json(recipe);
       } else {
         res.status(404).json({ message: 'Could not find recipe with given id.' })
       }
@@ -48,7 +48,7 @@ router.get('/:id/steps', (req, res) => {
   Recipes.findSteps(id)
     .then(steps => {
       if (steps.length) {
-        res.json(steps);
+        res.status(200).json(steps);
       } else {
         res.status(404).json({ message: 'Could not find steps for given recipe' })
       }
@@ -62,7 +62,7 @@ router.post('/:id/steps', (req, res) => {
   const stepData = req.body;
   const { id } = req.params;
 
-  Recipes.findById(id)
+  Recipes.getById(id)
     .then(recipe => {
       if (recipe) {
         Recipes.addStep(stepData, id)
