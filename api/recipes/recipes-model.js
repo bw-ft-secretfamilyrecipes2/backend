@@ -13,9 +13,7 @@ module.exports = {
 }
 
 function getRecipes(){
-    return db('recipes')
-    // .join('steps', 'recipes.id', '=',
-    // 'steps.recipe_id');
+    return db("recipes");
 }
 
 function getById(id){

@@ -2,16 +2,12 @@ const router = require("express").Router();
 
 const Recipes = require('./recipes-model.js');
 
-router.get("/", (req, res) => {
-    // should return a list of all created recipes from all users
-    // console.log("token", req.decodedToken);
-    Recipes.getRecipes()
-      .then(recipes => {
-        res.staus(200).json(recipes);
-      })
-      .catch(err => {
-        res.status(500).json({ message: 'Failed to get recipes' });
-      });
+router.get('/', (req, res) => {
+  Recipes.getRecipes()
+  .then(recipes => {
+  res.status(200).json(recipes)
+})
+  .catch(err => res.status(500).json({ message: 'Failed to get recipes.'}))
 });
 
 router.get('/:id', (req, res) => {
