@@ -25,7 +25,7 @@ exports.up = function(knex) {
             recipes.text('imageURL')
             recipes.string('prepTime')
             recipes.string('cookTime')
-            recipes.integer('yields')
+            recipes.string('yields')
         })
         //steps
         .createTable('steps', steps => {
