@@ -28,19 +28,7 @@ router.get('/:id', (req, res) => {
     .catch(err => {
       res.status(500).json({ message: 'Failed to get recipes.' })
     })
-})
-
-// router.post('/', (req, res) => {
-//   const recipeData = req.body;
-
-//   Recipes.createRecipe(recipeData)
-//     .then(recipe => {
-//       res.status(201).json(recipe);
-//     })
-//     .catch(err => {
-//       res.status(500).json({ message: 'Failed to create new recipe' })
-//     })
-// })
+});
 
 router.get('/:id/steps', (req, res) => {
   const { id } = req.params;
