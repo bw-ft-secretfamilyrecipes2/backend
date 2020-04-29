@@ -127,7 +127,8 @@ function findRecipeIngredients(recipeId){
           .then( ids => { 
               return db( 'recipe_ingredients' )
               .insert({ recipe_id: recipeId, 
-                        ingredient_id: ids[0]
+                        ingredient_id: ids[0],
+                        amount: ingredient.amount
                      })        
               .then( () => {
                 console.log('line 131: ', ids[0])
