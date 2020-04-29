@@ -170,21 +170,26 @@ router.post('/:id/ingredients', (req, res) => {
 
   console.log(ingredient)
   
-  // Recipes.getById(id)
-  //   .then(recipe => {
-  //     console.log('*****recipe: ', recipe)
-  //     if (!recipe) {
-  //       res.status(400).json({ message: 'that recipe does not exist.' })
-  //     }
-
-      Recipes.insertIngredient(id, ingredient)
-      .then(newIngredient => {
-        res.status(201).json(newIngredient)
+  Recipes.getById(id)
+    .then(recipe => {
+      console.log('*****recipe: ', recipe)
+      if (!recipe) {
+        res.status(400).json({ message: 'that recipe does not exist.' })
+      }
+      console.log(ingredient)
+      
+      Recipes.insertIngredient(recipe.id, ingredient)
+      .then(added => {
+        console.log('****added: ', added)
+        res.status(201).json(added)
       })
-      .catch(err => res.status(400).json({ message: 'error adding ingredient', err }))
+      .catch(err => {
+        console.log(err)
+        res.status(400).json({ message: 'error trying to add that ingredient.', err })
+      })
     })
-//     .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
-// })
+    .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
+})
 
 //delete recipe ingredient
 router.delete('/:id/ingredients/:ingredientId', (req, res) => {
