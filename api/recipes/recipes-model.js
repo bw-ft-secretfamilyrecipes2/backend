@@ -8,6 +8,9 @@ module.exports = {
     findStepById,
     updateStep,
     removeStep,
+    findRecipeIngredients,
+    insertIngredient,
+    deleteRecipeIngredient,
     assignIngredient,
     updateRecipePic,
     findRecipePic,
@@ -87,3 +90,59 @@ function findRecipePic(id) {
         .select('id', 'imageURL')
         .where({ id });
 }
+
+function findRecipeIngredients(recipeId){
+    return db('recipe_ingredients')
+    .select('ingredientName',
+            'amount')
+    .where('recipe_id', recipeId)
+    .join('ingredients', 
+    'recipe_ingredients.ingredient_id',
+    'ingredients.id')
+    .catch(err => console.log('******helper: ', err))
+  };
+
+  function insertIngredient( recipeId, ingredient){ 
+    db('ingredients')         //Access ingredients database
+    .where({ingredientName: ingredient.ingredientName})    //checks condition where ingredientNames match up
+    .then(ids => {     //returns array with  it's id from resources database IF found
+          if(ids[0]){   //if found in resources database then...
+          return db('recipe_ingredients') //access middle table (projects_resources)
+          //inserts project_id (from args)
+          // and resource_id (from the id inside array from previous step)
+          .insert({ recipe_id: recipeId, 
+                    ingredient_id: ids, 
+                    amount: ingredient.amount 
+                })  
+          .then( () => { //returns that resource but now it's assigned to a  project
+              return db( 'ingredients' )          
+              .where( { id: ids[0] } )          
+              .first();        
+              });    
+          }
+          else{ //if not found in resources database then...
+          return db('ingredients') //access resource database
+          .insert(ingredient.name)  //insert the resource object from the function args
+          .then( ids => { 
+              return db( 'recipe_ingredients' ) //access middle table (projects_resources)
+              //inserts project_id (from args)
+              // and resource_id (from the id inside array from previous step)
+              .insert({ recipe_id: recipeId, 
+                        ingredient_id: ids[0]
+                     })        
+              .then( () => {  //returns that resource but now it's assigned to a  project       
+                  return db( 'ingredients' )          
+                  .where( { id: ids[0] } )          
+                  .first();        
+                  })
+              } 
+          )
+      } 
+  })
+}
+
+  function deleteRecipeIngredient(ingredientId) {
+      return db('recipe_ingredients')
+      .where('recipe_ingredients.id', ingredientId)
+      .del()
+  }
