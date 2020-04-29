@@ -127,13 +127,13 @@ cloudinary.config({
 
 // PUT add/edit recipe image
 router.put('/:id/image', (req, res) => {
-  const file = req.files.image;
+  const imageURL = req.body.imageURL;
   const id = req.params.id
 
-  console.log('file:', file, 'id:', id);
-  cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-    console.log('CLOUDINARY', result);
-    Recipes.updateRecipePic({ imageURL: result.url }, id)
+  // console.log('file:', file, 'id:', id);
+  // cloudinary.uploader.upload(file.upload.path, result => {
+  // console.log('CLOUDINARY', result);
+    Recipes.updateRecipePic({ imageURL, id })
       .then(res => {
         res.json({ success: true, result });
       })
@@ -141,7 +141,8 @@ router.put('/:id/image', (req, res) => {
         console.log(err);
         res.status(500).json({ message: 'Error uploading to Cloudinary' });
       });
-  });
+
+
 });
 
 // GET get recipe image
