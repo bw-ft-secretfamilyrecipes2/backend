@@ -123,7 +123,7 @@ function findRecipeIngredients(recipeId){
           else{
               console.log('line 123: ')
           return db('ingredients')
-          .insert({ingredientName: ingredient.ingredientName})
+          .insert({ingredientName: ingredient.ingredientName}, 'id')
           .then( ids => { 
               return db( 'recipe_ingredients' )
               .insert({ recipe_id: recipeId, 
