@@ -83,7 +83,7 @@ function updateRecipePic(changes, id) {
     return db('recipes')
         .where({ id })
         .update(changes)
-        .then(count => findById(id));
+        .then(count => getById(id));
 }
 
 function findRecipePic(id) {

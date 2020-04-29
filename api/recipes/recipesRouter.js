@@ -5,8 +5,8 @@ const Recipes = require('./recipes-model.js');
 const cloudinary = require('cloudinary').v2;
 const bodyParser = require('body-parser');
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: true }));
+// router.use(bodyParser.json());
+// router.use(bodyParser.urlencoded({ extended: true }));
 
 //gets all recipes
 router.get('/', (req, res) => {
@@ -223,36 +223,39 @@ cloudinary.config({
 // POST add recipe image
 
 router.post("/:id/image", (req, res) => {
-  const data = {
-    image: req.body.image,
-  };
 
-  cloudinary.uploader.upload(data.image);
-  
-})
-
-// PUT edit recipe image
-router.put('/:id/image', (req, res) => {
-  // const imageURL = req.body.imageURL;
-  const id = req.params.id
-  const changes = {
-    image: req.body.image,
-  };
-
-  // console.log('file:', file, 'id:', id);
-  cloudinary.uploader.upload(changes.image);
-  // cloudinary.uploader.upload(file.upload.path, result => {
-  // console.log('CLOUDINARY', result);
-    Recipes.updateRecipePic({ changes, id })
-      .then(res => {
-        res.json({ success: true, changes });
+  const file = req.files.photo;
+  console.log(file);
+  cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+    Recipes.addRecipePic({ imageURL: result.url, id: req.params.id })
+      .then(output => {
+        res.json({ success: true, result });
       })
       .catch(err => {
         console.log(err);
         res.status(500).json({ message: 'Error uploading to Cloudinary' });
       });
+  });
+});
 
+// PUT edit recipe image
+router.put('/:id/image', (req, res) => {
+  const file = req.files.photo;
+  const id = req.params.id;
 
+  console.log('file', file, 'id', id);
+
+  cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
+    console.log('CLOUDINARY', result);
+    Recipes.updateRecipePic({ imageURL: result.url }, id)
+      .then(output => {
+        res.json({ success: true, result });
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: 'Error uploading to Cloudinary' });
+      });
+  });
 });
 
 // GET get recipe image
