@@ -45,13 +45,14 @@ router.get('/:id/recipes/:recipeId', (req, res) => {
 router.post('/:id/recipes', (req, res) => {
     const { id } = req.params;
     const newRecipe = req.body;
+    console.log(newRecipe);
     newRecipe.user_id = id;
 
     Users.addRecipe(newRecipe, id)
     .then(recipes => {
         res.status(200).json(recipes)
     })
-    .catch(err => res.status(500).json({ message: 'error adding recipe.'}))
+    .catch(err => res.status(500).json({ message: 'error adding recipe.', err}))
 });
 
 //updates recipe
