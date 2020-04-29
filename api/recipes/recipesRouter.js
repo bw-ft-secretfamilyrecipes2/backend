@@ -34,6 +34,7 @@ router.get('/:id', (req, res) => {
     })
 });
 
+//gets recipes' steps
 router.get('/:id/steps', (req, res) => {
   const { id } = req.params;
 
@@ -50,6 +51,7 @@ router.get('/:id/steps', (req, res) => {
     })
 })
 
+//post a step to a recipe
 router.post('/:id/steps', (req, res) => {
   const stepData = req.body;
   const { id } = req.params;
@@ -70,6 +72,7 @@ router.post('/:id/steps', (req, res) => {
     })
 })
 
+//find particular step
 router.get('/:id/steps/:stepId', (req, res) => {
   const { id, stepId } = req.params;
 
@@ -88,6 +91,7 @@ router.get('/:id/steps/:stepId', (req, res) => {
     .catch(err => res.status(500).json({ messasge: 'error getting step.' }))
 })
 
+//update particular step
 router.put('/:id/steps/:stepId', (req, res) => {
   const { id, stepId } = req.params;
   const changes = req.body;
@@ -106,6 +110,7 @@ router.put('/:id/steps/:stepId', (req, res) => {
     .catch(err => res.status(400).json({ message: 'error finding that step.', err }))
 })
 
+//delete particular step
 router.delete('/:id/steps/:stepId', (req, res) => {
   const { id, stepId } = req.params;
 
@@ -121,6 +126,87 @@ router.delete('/:id/steps/:stepId', (req, res) => {
         .catch(err => res.status(400).json({ message: 'error deleting the step.' }))
     })
     .catch(err => res.status(400).json({ message: 'error finding that step.', err }))
+})
+
+//get recipes' ingredients
+router.get('/:id/ingredients', (req, res) => {
+  const { id } = req.params;
+
+  Recipes.getById(id)
+  .then(recipe => {
+    console.log(recipe)
+    if(!recipe){
+      res.status(400).json({ message: 'that recipe does not exist.'})
+    }
+
+    Recipes.findRecipeIngredients(id)
+    .then(ingredients => {
+      res.status(200).json(ingredients)
+    })
+    .catch(err => res.status(400).json({ message: 'no ingredients.'}))
+  })
+  .catch(err => res.status(500).json({ message: 'error finding recipe.'}))
+})
+
+// router.post('/:id/ingredients', (req, res) => {
+//   const { id } = req.params;
+//   const ingredient = req.body;
+
+//   Recipes.getById(id)
+//   .then(recipe => {
+//     console.log(recipe)
+//     if(!recipe){
+//       res.status(400).json({ message: 'that recipe does not exist.'})
+//     }
+
+//     Recipes.insertIngredient(id, ingredient)
+//     .then(newIngredient => {
+//       res.status(201).json(newIngredient)
+//     })
+//     .catch(err => res.status(400).json({ message: 'error adding ingredient', err }))
+//   })
+//   .catch(err => res.status(500).json({ message: 'error finding recipe.', err}))
+// })
+
+router.post('/:id/ingredients', (req, res) => {
+  const { id } = req.params;
+  const ingredient = req.body;
+
+  console.log(ingredient)
+  
+  // Recipes.getById(id)
+  //   .then(recipe => {
+  //     console.log('*****recipe: ', recipe)
+  //     if (!recipe) {
+  //       res.status(400).json({ message: 'that recipe does not exist.' })
+  //     }
+
+      Recipes.insertIngredient(id, ingredient)
+      .then(newIngredient => {
+        res.status(201).json(newIngredient)
+      })
+      .catch(err => res.status(400).json({ message: 'error adding ingredient', err }))
+    })
+//     .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
+// })
+
+//delete recipe ingredient
+router.delete('/:id/ingredients/:ingredientId', (req, res) => {
+  const { id, ingredientId } = req.params;
+  
+  Recipes.getById(id)
+    .then(recipe => {
+      if (!recipe) {
+        res.status(400).json({ message: 'that recipe does not exist.' })
+      }
+
+      Recipes.deleteRecipeIngredient(ingredientId)
+        .then(deleted => {
+          res.status(201).json({ message: 'deleted successfully!', deleted })
+        })
+        .catch(err => res.status(400).json({ message: 'error deleting the ingredient.' }))
+    })
+    .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
 })
 
 cloudinary.config({
