@@ -9,6 +9,9 @@ const usersRouter = require('./users/usersRouter.js')
 
 const server = express();
 
+const fileupload = require("express-fileupload");
+server.use(fileupload({ useTempFiles: true }));
+
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
