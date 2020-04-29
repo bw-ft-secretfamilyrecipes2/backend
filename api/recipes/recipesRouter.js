@@ -3,6 +3,10 @@ const router = require("express").Router();
 const Recipes = require('./recipes-model.js');
 
 const cloudinary = require('cloudinary').v2;
+const bodyParser = require('body-parser');
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 //gets all recipes
 router.get('/', (req, res) => {
@@ -216,17 +220,32 @@ cloudinary.config({
   api_secret: 'hnbjjHVnNfC0RVXUJrCvy5u9NLc',
 });
 
-// PUT add/edit recipe image
+// POST add recipe image
+
+router.post("/:id/image", (req, res) => {
+  const data = {
+    image: req.body.image,
+  };
+
+  cloudinary.uploader.upload(data.image);
+  
+})
+
+// PUT edit recipe image
 router.put('/:id/image', (req, res) => {
-  const imageURL = req.body.imageURL;
+  // const imageURL = req.body.imageURL;
   const id = req.params.id
+  const changes = {
+    image: req.body.image,
+  };
 
   // console.log('file:', file, 'id:', id);
+  cloudinary.uploader.upload(changes.image);
   // cloudinary.uploader.upload(file.upload.path, result => {
   // console.log('CLOUDINARY', result);
-    Recipes.updateRecipePic({ imageURL, id })
+    Recipes.updateRecipePic({ changes, id })
       .then(res => {
-        res.json({ success: true, result });
+        res.json({ success: true, changes });
       })
       .catch(err => {
         console.log(err);
