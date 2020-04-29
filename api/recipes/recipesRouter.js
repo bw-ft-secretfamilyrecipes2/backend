@@ -5,8 +5,8 @@ const Recipes = require('./recipes-model.js');
 const cloudinary = require('cloudinary').v2;
 const bodyParser = require('body-parser');
 
-// router.use(bodyParser.json());
-// router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
 
 //gets all recipes
 router.get('/', (req, res) => {
@@ -128,7 +128,7 @@ router.delete('/:id/steps/:stepId', (req, res) => {
     .catch(err => res.status(400).json({ message: 'error finding that step.', err }))
 })
 
-//get recipes' ingredients
+// get recipes' ingredients
 router.get('/:id/ingredients', (req, res) => {
   const { id } = req.params;
 
@@ -148,52 +148,33 @@ router.get('/:id/ingredients', (req, res) => {
   .catch(err => res.status(500).json({ message: 'error finding recipe.'}))
 })
 
-// router.post('/:id/ingredients', (req, res) => {
-//   const { id } = req.params;
-//   const ingredient = req.body;
-
-//   Recipes.getById(id)
-//   .then(recipe => {
-//     console.log(recipe)
-//     if(!recipe){
-//       res.status(400).json({ message: 'that recipe does not exist.'})
-//     }
-
-//     Recipes.insertIngredient(id, ingredient)
-//     .then(newIngredient => {
-//       res.status(201).json(newIngredient)
-//     })
-//     .catch(err => res.status(400).json({ message: 'error adding ingredient', err }))
-//   })
-//   .catch(err => res.status(500).json({ message: 'error finding recipe.', err}))
-// })
-
-router.post('/:id/ingredients', (req, res) => {
-  const { id } = req.params;
-  const ingredient = req.body;
-
-  console.log(ingredient)
+//add ingredients to a recipe
+router.post('/:id/ingredients', (req, res) => {
+    const { id } = req.params;
+    const ingredient = req.body;
   
-  Recipes.getById(id)
-    .then(recipe => {
-      console.log('*****recipe: ', recipe)
-      if (!recipe) {
-        res.status(400).json({ message: 'that recipe does not exist.' })
-      }
-      console.log(ingredient)
-      
-      Recipes.insertIngredient(recipe.id, ingredient)
-      .then(added => {
-        console.log('****added: ', added)
-        res.status(201).json(added)
-      })
-      .catch(err => {
-        console.log(err)
-        res.status(400).json({ message: 'error trying to add that ingredient.', err })
-      })
-    })
-    .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
-})
+    console.log(ingredient)
+    
+    Recipes.getById(id)
+      .then(recipe => {
+        console.log('*****recipe: ', recipe)
+        if (!recipe) {
+          res.status(400).json({ message: 'that recipe does not exist.' })
+        }
+        console.log(ingredient)
+        
+        Recipes.insertIngredient(recipe.id, ingredient)
+        .then(added => {
+          console.log('****added: ', added)
+          res.status(201).json(added)
+        })
+        .catch(err => {
+          console.log(err)
+          res.status(400).json({ message: 'error trying to add that ingredient.', err })
+        })
+      })
+      .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
+  })
 
 //delete recipe ingredient
 router.delete('/:id/ingredients/:ingredientId', (req, res) => {
@@ -221,41 +202,37 @@ cloudinary.config({
 });
 
 // POST add recipe image
-
 router.post("/:id/image", (req, res) => {
+  const data = {
+    image: req.body.image,
+  };
 
-  const file = req.files.photo;
-  console.log(file);
-  cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-    Recipes.addRecipePic({ imageURL: result.url, id: req.params.id })
-      .then(output => {
-        res.json({ success: true, result });
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(500).json({ message: 'Error uploading to Cloudinary' });
-      });
-  });
-});
+  cloudinary.uploader.upload(data.image);
+  
+})
 
 // PUT edit recipe image
 router.put('/:id/image', (req, res) => {
-  const file = req.files.photo;
-  const id = req.params.id;
+  // const imageURL = req.body.imageURL;
+  const id = req.params.id
+  const changes = {
+    image: req.body.image,
+  };
 
-  console.log('file', file, 'id', id);
-
-  cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
-    console.log('CLOUDINARY', result);
-    Recipes.updateRecipePic({ imageURL: result.url }, id)
-      .then(output => {
-        res.json({ success: true, result });
+  // console.log('file:', file, 'id:', id);
+  cloudinary.uploader.upload(changes.image);
+  // cloudinary.uploader.upload(file.upload.path, result => {
+  // console.log('CLOUDINARY', result);
+    Recipes.updateRecipePic({ changes, id })
+      .then(res => {
+        res.json({ success: true, changes });
       })
       .catch(err => {
         console.log(err);
         res.status(500).json({ message: 'Error uploading to Cloudinary' });
       });
-  });
+
+
 });
 
 // GET get recipe image
