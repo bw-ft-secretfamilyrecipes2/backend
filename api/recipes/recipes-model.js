@@ -11,6 +11,7 @@ module.exports = {
     assignIngredient,
     updateRecipePic,
     findRecipePic,
+    addRecipePic,
 }
 
 function getRecipes(){
@@ -86,4 +87,9 @@ function findRecipePic(id) {
     return db('recipes')
         .select('id', 'imageURL')
         .where({ id });
+}
+
+function addRecipePic(image) {
+    return db('recipes')
+        .insert(image, 'id');
 }
