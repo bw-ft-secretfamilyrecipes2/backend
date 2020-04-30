@@ -238,16 +238,16 @@ router.put('/:id/image', (req, res) => {
 });
 
 // GET get recipe image
-router.get('/:id/image', (req, res) => {
-  const { id } = req.params;
-  Recipes.findRecipePic(id)
-    .then(picture => {
-      res.status(200).json(picture);
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'Failed to get image urls' });
-    });
-});
+// router.get('/:id/image', (req, res) => {
+//   const { id } = req.params;
+//   Recipes.findRecipePic(id)
+//     .then(picture => {
+//       res.status(200).json(picture);
+//     })
+//     .catch(err => {
+//       console.log(err);
+//       res.status(500).json({ message: 'Failed to get image urls' });
+//     });
+// });
 
 module.exports = router;
