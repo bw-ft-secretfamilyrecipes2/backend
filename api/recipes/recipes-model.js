@@ -11,7 +11,7 @@ module.exports = {
     findRecipeIngredients,
     insertIngredient,
     deleteRecipeIngredient,
-    assignIngredient,
+    // assignIngredient,
     updateRecipePic,
     findRecipePic,
     addRecipePic,
@@ -59,25 +59,25 @@ function removeStep(stepId) {
      .del()
 }
 
-function assignIngredient( recipe_id, ingredient_id){
-    return db('recipe_ingredients')
-    .select('recipe_ingredients.ingredient_id')
-    .where({'recipe_ingredients.recipe_id': 
-        recipe_id, 'recipe_ingredients.ingredient_id':
-        ingredient_id})
-    .then(res => {
-        const found = res.find(function(ingredient){
-            return ingredient.ingredient_id === parseInt(ingredient_id)
-        });
-        if(!found){
-            return db('recipe_ingredients')
-            .insert({recipe_id, ingredient_id})
-        } else {
-            return null
-        }
-    })
-    .catch(err => console.log('dberr: ', err))
-}
+// function assignIngredient( recipe_id, ingredient_id){
+//     return db('recipe_ingredients')
+//     .select('recipe_ingredients.ingredient_id')
+//     .where({'recipe_ingredients.recipe_id': 
+//         recipe_id, 'recipe_ingredients.ingredient_id':
+//         ingredient_id})
+//     .then(res => {
+//         const found = res.find(function(ingredient){
+//             return ingredient.ingredient_id === parseInt(ingredient_id)
+//         });
+//         if(!found){
+//             return db('recipe_ingredients')
+//             .insert({recipe_id, ingredient_id})
+//         } else {
+//             return null
+//         }
+//     })
+//     .catch(err => console.log('dberr: ', err))
+// }
 
 function updateRecipePic(changes, id) {
     return db('recipes')
