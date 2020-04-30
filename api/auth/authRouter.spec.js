@@ -44,7 +44,7 @@ describe('authRouter', () => {
         it("should return 500 to invalid password", () => {
             return request(server)
             .post("/api/auth/register")
-            .send({ username: 'username', password: 2 })
+            .send({ username: 'test', password: 2 })
             .then(res => {
             expect(res.status).toBe(500);
             });

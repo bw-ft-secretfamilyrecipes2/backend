@@ -18,21 +18,21 @@ describe('recipesRouter', () => {
     });
 });
 
-// describe('POST /:id/steps', function () {
-//     beforeEach(async () => {
-//         await db('recipes').truncate();
-//     })
+describe('POST /:id/steps', function () {
+    beforeEach(async () => {
+        await db('recipes').truncate();
+    })
 
-//     it('return 201 on success', function () {
-//         return request(server)
-//             .post('/:id/steps')
-//             .send({ 
-//                 recipe_id: 1,
-//                 stepNum: 4,
-//                 stepInstruction: 'take out the shumai'
-//             })
-//             .then(res => {
-//                 expect(res.status).toBe(201);
-//             });
-//     });
-// })
+    it('404 on fail', function () {
+        return request(server)
+            .post('/:id/steps/')
+            .send({ 
+                recipe_id: 3,
+                stepNum: 3,
+                stepInstruction: 'take out the shumai'
+            })
+            .then(res => {
+                expect(res.status).toBe(404);
+            });
+    });
+})
