@@ -18,7 +18,8 @@ module.exports = {
 }
 
 function getRecipes(){
-    return db("recipes");
+    return db("recipes")
+    .orderBy('recipes.id', 'asc')
 }
 
 function getById(id){

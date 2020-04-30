@@ -40,6 +40,7 @@ function findRecipes(id) {
                 'recipes.prepTime',
                 'recipes.cookTime',
                 'recipes.yields')
+        .orderBy('recipes.id', 'asc')
         .where('users.id', id)
 }
 
@@ -64,6 +65,7 @@ function addRecipe(newRecipe){
                 console.log(id)
                 return db('recipes')
                         .where('id', id[0])
+                        .first()
             })
 }
 
