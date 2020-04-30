@@ -18,6 +18,8 @@ exports.up = function(knex) {
             recipes.integer('user_id', 255)
             .notNullable()
             .references('users.id')
+            .onDelete('RESTRICT')
+            .onUpdate('CASCADE');
             recipes.string('recipeName', 255)
             .notNullable()
             .unique();
@@ -32,6 +34,8 @@ exports.up = function(knex) {
             steps.increments('id')
             steps.integer('recipe_id', 255)
             .references('recipes.id')
+            .onDelete('RESTRICT')
+            .onUpdate('CASCADE');
             steps.integer('stepNum', 255)
             .notNullable();
             steps.text('stepInstruction')
