@@ -57,13 +57,22 @@ function findRecipeById(recipeId){
     .where('recipes.id', recipeId)
 }
 
-function addRecipe(newRecipe, id){
+function addRecipe(newRecipe){
     return db('recipes')
             .insert(newRecipe, 'id')
-            .then(() => {
-                return findRecipes(id)
+            .then((id) => {
+                console.log(id)
+                return db('recipes')
+                        .where('id', id[0])
             })
 }
+
+// async function addStep(step, recipe_id) {
+//     const newStep = {...step, recipe_id};
+//     const [id] = await db('steps')
+        //.insert(newStep, 'id');
+//     return db('steps').where('id', id)
+// }
 
 function updateRecipe(changes, recipeId){
     return db('recipes')
