@@ -89,7 +89,10 @@ router.delete('/:id/recipes/:recipeId', (req, res) => {
           .then(deleted => {
             res.status(201).json({ message: 'deleted successfully!', deleted })
           })
-          .catch(err => res.status(400).json({ message: 'error deleting the recipe.' }))
+          .catch(err => {
+              console.log('delete err: ', err)
+            res.status(400).json({ message: 'error deleting the recipe.', err })
+          })
       })
       .catch(err => res.status(400).json({ message: 'error finding that recipe.', err }))
   })
