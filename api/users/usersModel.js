@@ -96,6 +96,7 @@ function updateRecipe(changes, recipeId){
             .then(() => {
                 return findRecipeById(recipeId)
             })
+            .catch(err => console.log('catch: ', err))
 }
 
 function removeRecipe(recipeId) {
