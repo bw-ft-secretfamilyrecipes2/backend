@@ -66,9 +66,9 @@ router.put('/:id/recipes/:recipeId', (req, res) => {
     Users.findRecipeById(recipeId)
     .then(recipe => {
         console.log('res: ', recipe)
-        if(!recipe[0]){
-            res.status(400).json({ message: 'that recipe does not exist.' })
-        }
+        // if(!recipe[0]){
+        //     res.status(400).json({ message: 'that recipe does not exist.' })
+        // }
         const recipeUpdate = {};
             recipeUpdate.recipeName = recipe.recipeName
             recipeUpdate.description = recipe.description
