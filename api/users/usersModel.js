@@ -59,8 +59,19 @@ function findRecipeById(recipeId){
 }
 
 function addRecipe(newRecipe){
+    const {recipeName,
+            description,
+            imgageURL,
+            prepTime,
+            cookTime,
+            yields} = newRecipe
     return db('recipes')
-            .insert(newRecipe, 'id')
+            .insert({recipeName,
+                description,
+                imgageURL,
+                prepTime,
+                cookTime,
+                yields}, 'id')
             .then((id) => {
                 console.log(id)
                 return db('recipes')
