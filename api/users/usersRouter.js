@@ -69,7 +69,15 @@ router.put('/:id/recipes/:recipeId', (req, res) => {
         if(!recipe[0]){
             res.status(400).json({ message: 'that recipe does not exist.' })
         }
-        Users.updateRecipe(changes, recipeId)
+        const recipeUpdate = {};
+            recipeUpdate.recipeName = recipe.recipeName
+            recipeUpdate.description = recipe.description
+            recipeUpdate.imageURL = recipe.imageURL
+            recipeUpdate.prepTime = recipe.prepTime
+            recipeUpdate.cookTime = recipe.cookTime
+            recipeUpdate.yields = recipe.yields
+
+        Users.updateRecipe(changes, recipeUpdate, recipeId)
         .then(update => {
             console.log(update)
             res.status(201).json({ message: 'update success!', update})
