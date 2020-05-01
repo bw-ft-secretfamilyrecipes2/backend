@@ -64,14 +64,16 @@ function addRecipe(newRecipe){
             imageURL,
             prepTime,
             cookTime,
-            yields} = newRecipe
+            yields,
+            user_id} = newRecipe
     return db('recipes')
             .insert({recipeName,
                 description,
                 imageURL,
                 prepTime,
                 cookTime,
-                yields}, 'id')
+                yields,
+                user_id}, 'id')
             .then((id) => {
                 console.log(id)
                 return db('recipes')
