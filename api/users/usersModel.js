@@ -89,10 +89,22 @@ function addRecipe(newRecipe){
 //     return db('steps').where('id', id)
 // }
 
-function updateRecipe(changes, recipeId){
+function updateRecipe(changes, recipeUpdate, recipeId){
+    const { recipeName = recipeUpdate.recipeName,
+            description = recipeUpdate.description,
+            imageURL = recipeUpdate.imageURL,
+            prepTime = recipeUpdate.prepTime,
+            cookTime = recipeUpdate.cookTime,
+            yields = recipeUpdate.yields} =changes
+
     return db('recipes')
             .where('recipes.id', recipeId)
-            .update(changes)
+            .update({recipeName,
+                    description,
+                    imageURL,
+                    prepTime,
+                    cookTime,
+                    yields})
             .then(() => {
                 return findRecipeById(recipeId)
             })
